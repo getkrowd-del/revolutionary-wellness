@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/revolutionary-wellness/water-aerobics/">
+<!-- BASE:END -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+
+<!-- SEO Meta Tags -->
+<title>Water Aerobics | Revolutionary Wellness</title>
+<meta property="og:title" content="Water Aerobics | Revolutionary Wellness" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Water Aerobics | Revolutionary Wellness" />
+<!-- End SEO Meta Tags -->
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=4241');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='X8Zrfvkjs';
+  var apiBase='https://paymegpt.com';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    Revolutionary Wellness
+    <span>← Back to Home</span>
+  </a>
+  <a href="index.html" class="nav-back">← All Programs</a>
+  <a href="#cta" class="nav-cta">Join a Class</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Program Three · AEA Certified</p>
+    <h1 class="hero-title">
+      Water
+      <span>Aerobics</span>
+    </h1>
+    <p class="hero-tagline">Low impact. High energy. All the fun. 💧</p>
+    <p class="hero-body">Water-based fitness that takes pressure off your joints while building real strength, cardio endurance, and flexibility. Perfect for all fitness levels — including those recovering from injury or managing chronic conditions.</p>
+    <div class="hero-buttons">
+      <a href="#about" class="btn-primary">About the Class</a>
+      <a href="#why" class="btn-outline">Why Water?</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <p class="hero-card-title">✦ Water Aerobics at a Glance</p>
+      <div class="water-stat"><span class="water-stat-icon">🌊</span><div><strong>Joint-Friendly Movement</strong><span>Water reduces impact by up to 90% compared to land exercise</span></div></div>
+      <div class="water-stat"><span class="water-stat-icon">💪</span><span><strong>Full-Body Workout</strong><span>Water resistance works muscles from every angle</span></span></div>
+      <div class="water-stat"><span class="water-stat-icon">❤️</span><div><strong>Cardio Endurance</strong><span>Effective aerobic exercise that's gentle on the body</span></div></div>
+      <div class="water-stat"><span class="water-stat-icon">🧘</span><div><strong>Flexibility &amp; Balance</strong><span>Improve range of motion in a safe, supportive environment</span></div></div>
+      <div class="water-stat"><span class="water-stat-icon">🌟</span><div><strong>All Levels Welcome</strong><span>Beginners to active adults, injury recovery to maintenance</span></div></div>
+      <p class="hero-quote">"The water holds you up so you can push yourself further!"</p>
+    </div>
+  </div>
+</section>
+
+<div class="tagline-strip">
+  <p>🌊 AEA Certified · Silver Sneakers Eligible · All Bodies Welcome 💧</p>
+</div>
+
+<!-- WHY WATER -->
+<section class="why-section fade-up" id="why">
+  <div class="why-inner">
+    <div class="section-header">
+      <p class="section-eyebrow">The Science of Aquatic Fitness</p>
+      <h2 class="section-title">Why Water Aerobics?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="icon">🦴</div><h4>Protects Your Joints</h4><p>Buoyancy reduces stress on joints, making movement possible for people with arthritis, osteoporosis, or injury recovery.</p></div>
+      <div class="why-card"><div class="icon">💪</div><h4>Natural Resistance</h4><p>Water provides 12x more resistance than air, making every movement a full-body strength exercise without heavy weights.</p></div>
+      <div class="why-card"><div class="icon">🌡️</div><h4>Cooling &amp; Energizing</h4><p>Exercising in water keeps your body cool and comfortable, allowing longer, more effective workouts without overheating.</p></div>
+      <div class="why-card"><div class="icon">⚖️</div><h4>Balance &amp; Stability</h4><p>Water's natural resistance challenges your stabilizing muscles in all directions, dramatically improving balance over time.</p></div>
+      <div class="why-card"><div class="icon">🏃</div><h4>Effective Cardio</h4><p>Get a real cardiovascular workout that elevates your heart rate, improves circulation, and burns calories — gently.</p></div>
+      <div class="why-card"><div class="icon">😊</div><h4>Fun &amp; Social</h4><p>Classes are uplifting, energizing, and full of great music. The pool environment naturally fosters community and joy.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section fade-up" id="about">
+  <div class="about-inner">
+    <div class="about-content">
+      <p class="sec-label">About the Class</p>
+      <h2>AEA Certified Aquatic Fitness</h2>
+      <p>Tami's water aerobics classes are designed to deliver a <strong>safe, effective, and genuinely fun</strong> full-body workout in the pool. Led by an AEA (Aquatic Exercise Association) Certified Instructor, every session is thoughtfully structured for maximum benefit with minimal risk.</p>
+      <p>Whether you're brand new to exercise, returning after injury, managing a chronic condition, or simply looking for a refreshing alternative to land-based fitness — water aerobics meets you exactly where you are.</p>
+      <p>Classes combine cardio, strength, flexibility, and balance work in a <strong>supportive, energizing atmosphere</strong> set to upbeat music you'll love. Expect encouragement, laughter, and a workout you'll actually look forward to.</p>
+      <ul class="about-list">
+        <li>Low-impact warm-up and mobility work</li>
+        <li>Cardio intervals in the water</li>
+        <li>Strength training using water resistance</li>
+        <li>Balance and stability exercises</li>
+        <li>Flexibility and cool-down stretching</li>
+      </ul>
+    </div>
+    <div class="about-visual">
+      <h3>Perfect for Everyone</h3>
+      <p>No swimming ability required — classes take place in the shallow end where you can stand comfortably throughout.</p>
+      <p>Tami creates a welcoming, encouraging environment where every participant feels capable, celebrated, and motivated to keep coming back.</p>
+      <p style="font-family:'Caveat',cursive; font-size:1.25rem; color:var(--aqua-light); margin-top:1rem;">"The pool is our playground — and everyone's invited!" 🌊</p>
+      <div style="margin-top:1.5rem;"><span class="aea-badge">✦ AEA Certified Instructor</span></div>
+      <div style="margin-top:0.6rem;"><span class="aea-badge">✦ Silver Sneakers Compatible</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IS IT FOR -->
+<section class="who-section fade-up">
+  <div class="who-inner">
+    <div class="section-header">
+      <p class="section-eyebrow">Is This Class For You?</p>
+      <h2 class="section-title">Water Aerobics Is Perfect For...</h2>
+    </div>
+    <div class="who-grid">
+      <div class="who-card"><div class="icon">🦴</div><h4>Joint Conditions</h4><p>Arthritis, osteoporosis, or any condition that makes land exercise painful or difficult</p></div>
+      <div class="who-card"><div class="icon">🩹</div><h4>Injury Recovery</h4><p>Returning to fitness after surgery, injury, or a period of inactivity</p></div>
+      <div class="who-card"><div class="icon">👴</div><h4>Active Seniors</h4><p>Older adults looking to maintain strength, balance, and independence</p></div>
+      <div class="who-card"><div class="icon">🌱</div><h4>Beginners</h4><p>Anyone new to exercise who wants a gentle, welcoming place to start</p></div>
+      <div class="who-card"><div class="icon">💊</div><h4>Chronic Conditions</h4><p>Managing fibromyalgia, MS, diabetes, heart conditions, or other health challenges</p></div>
+      <div class="who-card"><div class="icon">🏊</div><h4>Anyone!</h4><p>Anyone who loves to move, craves community, and wants to feel amazing in the water</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTRUCTOR -->
+<section class="instructor-section fade-up">
+  <div class="instructor-inner">
+    <div class="instructor-badge">
+      <div class="letter">T</div>
+      <small>Tami Kraeger</small>
+    </div>
+    <div class="instructor-content">
+      <p class="sec-label">Your Instructor</p>
+      <h2>Meet Tami Kraeger</h2>
+      <p>As an <strong>AEA Certified Aquatic Fitness Instructor</strong> and 500+ Hour Registered Yoga Teacher, Tami brings deep expertise in movement, safety, and community-building to every class in the pool.</p>
+      <p>Her background spanning wellness, hospitality, group fitness, and safety leadership as a former flight attendant means every class is expertly managed, genuinely welcoming, and focused on your wellbeing from start to finish.</p>
+      <p>Tami's mission: to help you discover that exercise can be something you genuinely look forward to — and that the pool is one of the most joyful places to do it.</p>
+      <div class="cred-tags">
+        <span class="cred-tag">AEA Certified Aqua Fit</span>
+        <span class="cred-tag">500+ Hr RYT</span>
+        <span class="cred-tag">Silver Sneakers</span>
+        <span class="cred-tag">Cosmic Kids Yoga</span>
+        <span class="cred-tag">Former Flight Attendant</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section fade-up" id="cta">
+  <p class="section-eyebrow">Ready to Dive In?</p>
+  <h2>Join a Water Aerobics Class</h2>
+  <p>Contact Tami to find out about class schedules, locations, and how to get started. No experience needed — just bring yourself, a swimsuit, and an open mind!</p>
+  <a href="index.html#contact" class="btn-primary" style="background:var(--ocean); color:#E8F8FC; padding:0.9rem 2.2rem; border-radius:50px; text-decoration:none; font-weight:600; font-size:0.9rem; transition:all 0.25s; display:inline-block;">Get Class Info</a>
+  <p class="cta-note">The water is warm. The welcome is warmer. 💧</p>
+</section>
+
+<footer>
+  <div class="footer-logo">Revolutionary Wellness</div>
+  <a href="index.html">← Back to All Programs</a>
+  <p>© 2025 Tami Kraeger · Move · Breathe · Thrive</p>
+</footer>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
