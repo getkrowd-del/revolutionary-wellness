@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://getkrowd-del.github.io/revolutionary-wellness/water-aerobics/</loc>
+    <lastmod>2026-05-22T16:35:56.545Z</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://getkrowd-del.github.io/revolutionary-wellness/sassy-seat/</loc>
     <lastmod>2026-05-22T16:35:46.967Z</lastmod>
     <changefreq>weekly</changefreq>
@@ -13,11 +18,6 @@
   <url>
     <loc>https://getkrowd-del.github.io/revolutionary-wellness/</loc>
     <lastmod>2026-05-22T16:35:27.847Z</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://getkrowd-del.github.io/revolutionary-wellness/water-aerobics/</loc>
-    <lastmod>2026-05-22T16:35:19.000Z</lastmod>
     <changefreq>weekly</changefreq>
   </url>
 </urlset>
