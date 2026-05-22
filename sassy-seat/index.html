@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- BASE:START (managed by Coding Agent — do not edit) -->
+<base href="/revolutionary-wellness/sassy-seat/">
+<!-- BASE:END -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+
+<!-- SEO Meta Tags -->
+<title>Sassy Seat | Revolutionary Wellness</title>
+<meta property="og:title" content="Sassy Seat | Revolutionary Wellness" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Sassy Seat | Revolutionary Wellness" />
+<!-- End SEO Meta Tags -->
+
+<script data-field-replace>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var fields={};
+  var paramMap={
+    'first_name':'firstName','last_name':'lastName','full_name':'fullName',
+    'email':'email','phone':'phone','company':'company',
+    'city':'city','state':'state','country':'country'
+  };
+  var skipTags={'SCRIPT':1,'STYLE':1,'NOSCRIPT':1,'TEXTAREA':1,'CODE':1,'PRE':1};
+  var hasUrlFields=false;
+  for(var p in paramMap){
+    var v=params.get(p);
+    if(v){fields[paramMap[p]]=v;hasUrlFields=true;}
+  }
+  var contactId=params.get('contact_id');
+  function esc(s){
+    if(!s)return s;
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+  function doReplace(data){
+    var r={};
+    r['{{full_name}}']=esc(((data.firstName||'')+' '+(data.lastName||'')).trim()||((data.fullName||data.name)||''));
+    r['{{first_name}}']=esc(data.firstName||(data.name?data.name.split(' ')[0]:'')||'');
+    r['{{last_name}}']=esc(data.lastName||(data.name&&data.name.indexOf(' ')>-1?data.name.substring(data.name.indexOf(' ')+1):'')||'');
+    r['{{email}}']=esc(data.email||'');
+    r['{{phone}}']=esc(data.phone||'');
+    r['{{company}}']=esc(data.company||'');
+    r['{{city}}']=esc(data.city||'');
+    r['{{state}}']=esc(data.state||'');
+    r['{{country}}']=esc(data.country||'');
+    r['{{date}}']=new Date().toLocaleDateString();
+    r['{{time}}']=new Date().toLocaleTimeString();
+    r['{{location}}']=[data.city,data.state,data.country].filter(Boolean).join(', ');
+    r['{{tracking_id}}']=esc(data.trackingId||'');
+    r['{{lastClickedProduct}}']=esc(data.lastClickedProduct||'');
+    r['{{lastProductClickDate}}']=esc(data.lastProductClickDate||'');
+    r['{{lastClickedProductPrice}}']=esc(data.lastClickedProductPrice||'');
+    r['{{lastClickedProductURL}}']=esc(data.lastClickedProductURL||'');
+    r['{{productsClickedCount}}']=esc(data.productsClickedCount||'0');
+    r['{{ip_address}}']=esc(data.ipAddress||'');
+    r['{{ip}}']=esc(data.ipAddress||'');
+    if(data.customFields){
+      for(var k in data.customFields){
+        r['{{'+k+'}}']=esc(String(data.customFields[k]||''));
+      }
+    }
+    params.forEach(function(v,k){
+      if(!paramMap[k]&&k!=='contact_id'&&k!=='page_id'&&k.indexOf('utm_')!==0){
+        r['{{'+k+'}}']=esc(v);
+      }
+    });
+    var hasValues=false;
+    for(var key in r){if(r[key]){hasValues=true;break;}}
+    if(!hasValues)return;
+    var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
+      acceptNode:function(n){
+        var p=n.parentNode;
+        if(p&&skipTags[p.nodeName])return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var node;
+    while(node=walker.nextNode()){
+      var txt=node.nodeValue;
+      if(txt&&txt.indexOf('{{')>-1){
+        var changed=txt;
+        for(var ph in r){
+          if(r[ph]&&changed.indexOf(ph)>-1){
+            changed=changed.split(ph).join(r[ph]);
+          }
+        }
+        if(changed!==txt)node.nodeValue=changed;
+      }
+    }
+    var attrs=['value','placeholder','content','alt','title'];
+    attrs.forEach(function(attr){
+      var els=document.querySelectorAll('['+attr+'*="{{"]');
+      for(var i=0;i<els.length;i++){
+        var tag=els[i].tagName;
+        if(skipTags[tag])continue;
+        var val=els[i].getAttribute(attr);
+        if(val){
+          var nv=val;
+          for(var ph in r){
+            if(r[ph]&&nv.indexOf(ph)>-1){
+              nv=nv.split(ph).join(r[ph]);
+            }
+          }
+          if(nv!==val)els[i].setAttribute(attr,nv);
+        }
+      }
+    });
+  }
+  function run(){
+    if(contactId){
+      var xhr=new XMLHttpRequest();
+      xhr.open('GET','https://paymegpt.com/api/landing/context/'+encodeURIComponent(contactId)+'?page_id=4240');
+      xhr.onload=function(){
+        if(xhr.status===200){
+          try{
+            var resp=JSON.parse(xhr.responseText);
+            if(resp.success&&resp.contact){
+              var merged=resp.contact;
+              for(var k in fields){merged[k]=fields[k];}
+              doReplace(merged);
+              return;
+            }
+          }catch(e){}
+        }
+        if(hasUrlFields)doReplace(fields);
+      };
+      xhr.onerror=function(){if(hasUrlFields)doReplace(fields);};
+      xhr.send();
+    }else if(hasUrlFields){
+      doReplace(fields);
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',run);}
+  else{run();}
+})();
+</script>
+<script data-payment>
+(function(){
+  var slug='LAtTxAEx5';
+  var apiBase='https://paymegpt.com';
+  var successSubtext='';var successBtnLabel='Continue';var successBtnColor='#16a34a';var successRedirect='';
+  function findEmail(){
+    var ids=['email','emailAddress','buyer-email','buyerEmail','user-email','userEmail','checkout-email','customer-email','contact-email'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value&&el.value.includes('@'))return el.value.trim();}
+    var inputs=document.querySelectorAll('input[type="email"],input[name*="email"],input[placeholder*="email"],input[placeholder*="Email"]');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value&&inputs[j].value.includes('@'))return inputs[j].value.trim();}
+    return '';
+  }
+  function findName(){
+    var ids=['name','fullName','full-name','buyer-name','buyerName','customer-name','userName','user-name'];
+    for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(el&&el.value)return el.value.trim();}
+    var inputs=document.querySelectorAll('input[name*="name"]:not([name*="email"]):not([type="email"]),input[placeholder*="name"]:not([placeholder*="email"]):not([type="email"]),input[placeholder*="Name"]:not([type="email"])');
+    for(var j=0;j<inputs.length;j++){if(inputs[j].value)return inputs[j].value.trim();}
+    return '';
+  }
+  var __realProcessPayment=function(a,b,c,d,e){
+    var amountCents,email,productName,productDescription,customerName,quantity;
+    if(a&&typeof a==='object'){
+      amountCents=a.amountCents;email=a.email;productName=a.productName;
+      productDescription=a.productDescription||'';customerName=a.name||'';quantity=a.quantity||1;
+    }else{
+      amountCents=typeof a==='number'?a:0;productName=typeof b==='string'?b:'';
+      productDescription=typeof c==='string'?c:'';email='';customerName='';quantity=1;
+    }
+    if(!email)email=findEmail();
+    if(!customerName)customerName=findName();
+    if(!productName){alert('Product name is required.');return Promise.reject('no_product_name');}
+    if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
+    if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
+    var successBase=window.location.href.split('?')[0];
+    return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
+      else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
+    });
+  };
+  Object.defineProperty(window,'__processPayment',{value:__realProcessPayment,writable:false,configurable:false});
+  document.addEventListener('DOMContentLoaded',function(){
+    var urlParams=new URLSearchParams(window.location.search);
+    if(urlParams.get('payment')==='success'){
+      var pName=urlParams.get('product')||'your item';
+      var overlay=document.createElement('div');overlay.id='payment-success-overlay';
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+      var subTxt=successSubtext||('Thank you for purchasing '+pName+'.');
+      overlay.innerHTML='<div style="background:white;border-radius:16px;padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.15);"><div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><h2 style="margin:0 0 12px;font-size:24px;font-weight:700;color:#111827;">Payment Successful!</h2><p style="margin:0 0 24px;color:#6b7280;font-size:16px;">'+esc(subTxt)+'</p><button id="lp-pay-success-btn" style="padding:12px 32px;font-size:16px;font-weight:600;background:'+successBtnColor+';color:white;border:none;border-radius:8px;cursor:pointer;">'+esc(successBtnLabel)+'</button></div>';
+      document.body.appendChild(overlay);
+      var pBtn=document.getElementById('lp-pay-success-btn');
+      if(pBtn){pBtn.addEventListener('click',function(){if(successRedirect){window.location.href=successRedirect;}else{overlay.remove();window.history.replaceState({},'',window.location.pathname);}});}
+    }
+  });
+})();
+</script>  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    Revolutionary Wellness
+    <span>← Back to Home</span>
+  </a>
+  <a href="index.html" class="nav-back">← All Programs</a>
+  <a href="#cta" class="nav-cta">Find a Class</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Program Two · Chair-Based Fitness</p>
+    <h1 class="hero-title">
+      Sassy
+      <span>Seat</span>
+    </h1>
+    <p class="hero-tagline">Chair-Based Fitness with Heart, Humor &amp; Movement for Every Body 💜</p>
+    <p class="hero-body">A fun, uplifting chair-based fitness class designed to help seniors and individuals with mobility challenges stay active, strong, confident, and connected. No mat, no floor work — just great music, big smiles, and real results.</p>
+    <div class="hero-buttons">
+      <a href="#about" class="btn-primary">About the Class</a>
+      <a href="#benefits" class="btn-outline">See the Benefits</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <p class="hero-card-title">✦ The Sassy Seat Class</p>
+      <div class="class-detail"><span class="class-detail-icon">⏱️</span><div class="class-detail-text"><strong>Class Length</strong><span>45–50 minutes of fun, full-body movement</span></div></div>
+      <div class="class-detail"><span class="class-detail-icon">💺</span><div class="class-detail-text"><strong>Chair-Supported</strong><span>A chair provides stability — no floor work required</span></div></div>
+      <div class="class-detail"><span class="class-detail-icon">🎵</span><div class="class-detail-text"><strong>Music You'll Love</strong><span>Familiar, upbeat songs that feel like a celebration</span></div></div>
+      <div class="class-detail"><span class="class-detail-icon">🤝</span><div class="class-detail-text"><strong>Community Focus</strong><span>Sing along, move together, share smiles</span></div></div>
+      <div class="class-detail"><span class="class-detail-icon">🌟</span><div class="class-detail-text"><strong>All Abilities Welcome</strong><span>Regardless of age, fitness level, or mobility</span></div></div>
+      <p class="hero-quote">"Movement should be accessible, meaningful, and fun for everyone."</p>
+    </div>
+  </div>
+</section>
+
+<div class="tagline-strip">
+  <p>💜 Strong. Confident. Connected. That's the Sassy Seat way! 💜</p>
+</div>
+
+<!-- ABOUT -->
+<section class="about-section fade-up" id="about">
+  <div class="about-inner">
+    <div class="about-visual">
+      <h3>What's in Every Class?</h3>
+      <p>Every Sassy Seat session is a full-body experience — carefully structured to warm you up, get your heart going, build real strength, and leave you feeling fantastic.</p>
+      <div class="class-includes">
+        <h4>Class Structure Includes:</h4>
+        <div class="include-item">Gentle warm-up movements</div>
+        <div class="include-item">Fun low-impact cardio</div>
+        <div class="include-item">Strength and balance training</div>
+        <div class="include-item">Stretching and flexibility work</div>
+        <div class="include-item">Relaxing cool down and breath work</div>
+      </div>
+      <p style="margin-top:1.2rem; font-family:'Caveat',cursive; font-size:1.2rem; color:var(--rose);">"More like a celebration than exercise!" 🎉</p>
+    </div>
+
+    <div class="about-content">
+      <p class="sec-label">About Sassy Seat</p>
+      <h2>Fitness for Every Body, Every Ability</h2>
+      <p>Sassy Seat is a fun, uplifting chair-based fitness class designed to help <strong>seniors and individuals with mobility challenges</strong> stay active, strong, confident, and connected in a supportive environment where everyone is welcome.</p>
+      <p>Using a chair for stability and assistance, participants safely enjoy a full-body workout. Classes are set to <strong>familiar, upbeat music</strong> that participants know and love — creating an atmosphere that feels more like a celebration than exercise.</p>
+      <p>Singing along, moving together, and sharing smiles helps build confidence, reduce isolation, and foster meaningful social connection. Sassy Seat is about so much more than fitness — it's about <strong>belonging, dignity, and joy.</strong></p>
+      <div class="cert-grid">
+        <div class="cert-item"><span>Silver Sneakers Certified</span><small>Nationally recognized senior fitness program</small></div>
+        <div class="cert-item"><span>500+ Hour RYT</span><small>Extensive yoga teacher training</small></div>
+        <div class="cert-item"><span>AEA Certified</span><small>Aquatic Exercise Association instructor</small></div>
+        <div class="cert-item"><span>Wellness Background</span><small>Group fitness, hospitality &amp; safety leadership</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-section fade-up" id="benefits">
+  <div class="benefits-inner">
+    <div class="section-header">
+      <p class="section-eyebrow">Why Sassy Seat?</p>
+      <h2 class="section-title">Designed to Help You Thrive</h2>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card"><div class="icon">💪</div><h4>Strength &amp; Mobility</h4><p>Improve strength, mobility, flexibility, and balance safely using your chair for support.</p></div>
+      <div class="benefit-card"><div class="icon">❤️</div><h4>Heart Health</h4><p>Support heart health and circulation with fun, low-impact cardio that gets you moving.</p></div>
+      <div class="benefit-card"><div class="icon">🦋</div><h4>Independence</h4><p>Maintain independence and functional movement for everyday life activities and tasks.</p></div>
+      <div class="benefit-card"><div class="icon">😌</div><h4>Less Discomfort</h4><p>Reduce stiffness and joint discomfort through gentle, targeted movement and stretching.</p></div>
+      <div class="benefit-card"><div class="icon">⚡</div><h4>Energy &amp; Coordination</h4><p>Increase daily energy levels and improve coordination with fun, rhythmic movement.</p></div>
+      <div class="benefit-card"><div class="icon">🧠</div><h4>Cognitive Engagement</h4><p>Enhance mood and cognitive engagement through music, rhythm, and mindful movement.</p></div>
+      <div class="benefit-card"><div class="icon">🌿</div><h4>Stress Relief</h4><p>Decrease stress and anxiety through mindful movement and calming breath work.</p></div>
+      <div class="benefit-card"><div class="icon">🤝</div><h4>Social Connection</h4><p>Encourage social interaction and build meaningful community connection with others.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTRUCTOR -->
+<section class="instructor-section fade-up">
+  <div class="instructor-inner">
+    <div class="instructor-badge">
+      <div class="letter">T</div>
+      <small>Tami Kraeger</small>
+    </div>
+    <div class="instructor-content">
+      <p class="sec-label">Your Instructor</p>
+      <h2>Meet Tami Kraeger</h2>
+      <p>Instructor Tami Kraeger brings warmth, encouragement, and extensive wellness experience to every class. Her passion is helping older adults and those with limited mobility continue to move their bodies with <strong style="color:#FFF0F8;">confidence, dignity, and joy</strong> while staying engaged with the community around them.</p>
+      <p>With a background in wellness, group fitness, hospitality, and safety leadership as a former flight attendant and business owner, Tami creates classes that are welcoming, safe, empowering, and genuinely enjoyable. Every class is filled with encouragement, positivity, and the belief that movement should be accessible, meaningful, and fun for everyone.</p>
+      <div class="cred-tags">
+        <span class="cred-tag">500+ Hr RYT</span>
+        <span class="cred-tag">Silver Sneakers</span>
+        <span class="cred-tag">AEA Aqua Fit</span>
+        <span class="cred-tag">Cosmic Kids Yoga</span>
+        <span class="cred-tag">Former Flight Attendant</span>
+        <span class="cred-tag">Business Owner</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section fade-up" id="cta">
+  <p class="section-eyebrow">Join Us!</p>
+  <h2>Ready to Get Sassy?</h2>
+  <p>Contact Tami to find a Sassy Seat class near you, inquire about scheduling for your senior center, or learn more about bringing this program to your community.</p>
+  <a href="index.html#contact" class="btn-primary" style="background:var(--plum); color:#FFF0F8; padding:0.9rem 2.2rem; border-radius:50px; text-decoration:none; font-weight:600; font-size:0.9rem; transition:all 0.25s; display:inline-block;">Find a Class Near Me</a>
+  <p class="cta-note">Every body is welcome. Every pace is perfect. 💜</p>
+</section>
+
+<footer>
+  <div class="footer-logo">Revolutionary Wellness</div>
+  <a href="index.html">← Back to All Programs</a>
+  <p>© 2025 Tami Kraeger · Move · Breathe · Thrive</p>
+</footer>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
