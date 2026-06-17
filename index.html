@@ -224,7 +224,7 @@
 </head>
 <body>
 
-<nav>
+<nav data-section="navbar">
   <div class="nav-logo">
     Revolutionary Wellness
     <span>Move · Breathe · Thrive</span>
@@ -240,7 +240,7 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" data-section="hero">
   <div class="hero-left">
     <p class="hero-eyebrow">Wellness for Every Body &amp; Every Age</p>
     <h1 class="hero-title">
@@ -270,12 +270,12 @@
   </div>
 </section>
 
-<div class="tagline-strip">
+<div class="tagline-strip" data-section="section-1">
   <p>✨ Stories spark imagination · Yoga builds confidence · Water sets you free ✨</p>
 </div>
 
 <!-- PROGRAMS -->
-<section class="programs" id="programs">
+<section class="programs" id="programs" data-section="section-2">
   <div class="programs-header fade-up">
     <p class="section-eyebrow">What We Offer</p>
     <h2 class="section-title">Three Programs. One Mission.</h2>
@@ -322,7 +322,7 @@
 </section>
 
 <!-- ABOUT -->
-<section class="about fade-up" id="about">
+<section class="about fade-up" id="about" data-section="about">
   <div class="about-inner">
     <div class="about-badge-wrap">
       <div class="about-badge">
@@ -354,7 +354,7 @@
 </section>
 
 <!-- PHILOSOPHY -->
-<section class="philosophy fade-up">
+<section class="philosophy fade-up" data-section="section-3">
   <div class="philosophy-inner">
     <p class="section-eyebrow">Our Belief</p>
     <blockquote>"Movement is a gift that belongs to everyone — at every age, every ability, every stage of life."</blockquote>
@@ -371,7 +371,7 @@
 </section>
 
 <!-- CONTACT -->
-<section class="contact fade-up" id="contact">
+<section class="contact fade-up" id="contact" data-section="contact">
   <div class="contact-header">
     <p class="section-eyebrow">Get in Touch</p>
     <h2 class="section-title">Ready to Move Together?</h2>
@@ -434,7 +434,7 @@
   </div>
 </section>
 
-<footer>
+<footer data-section="footer">
   <div class="footer-logo">Revolutionary Wellness</div>
   <p>© 2025 Revolutionary Wellness · Tami Kraeger</p>
   <p>Move · Breathe · Thrive</p>
@@ -444,33 +444,48 @@
 const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold:0.1, rootMargin:'0px 0px -60px 0px' });
 document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
-// Contact form submit
-const form = document.getElementById('contact-form');
-const submitBtn = document.getElementById('submit-btn');
-const errorMsg = document.getElementById('form-error');
-const successMsg = document.getElementById('form-success');
-
-form.addEventListener('submit', async function(e) {
+// Contact form submit — POSTs directly to the flow webhook so it works on any host (including static GitHub Pages)
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
   e.preventDefault();
+  const form = e.target;
+  const submitBtn = document.getElementById('submit-btn');
+  const errorMsg = document.getElementById('form-error');
+  const successMsg = document.getElementById('form-success');
+
   errorMsg.classList.remove('visible');
+  errorMsg.textContent = '';
   submitBtn.disabled = true;
+  const originalBtnText = submitBtn.textContent;
   submitBtn.textContent = 'Sending...';
 
+  const payload = {
+    contactEmail: form.email.value,
+    contactName: form.name.value,
+    contactPhone: form.phone.value,
+    data: {
+      program: form.program.value,
+      message: form.message.value
+    }
+  };
+
   try {
-    const formData = new FormData(form);
-    const response = await fetch(window.location.pathname, {
+    const response = await fetch('https://paymegpt.com/api/webhooks/flow/3729/79e6be34c8816d376f44dcc7001b3bfcff2ff043e59b6edcfbad0acef07ce247', {
       method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
 
-    form.style.display = 'none';
-    successMsg.classList.add('visible');
+    if (response.ok) {
+      form.style.display = 'none';
+      successMsg.classList.add('visible');
+    } else {
+      throw new Error('Webhook responded with an error');
+    }
   } catch (err) {
-    errorMsg.textContent = 'Something went wrong. Please try again or email Tami directly.';
+    errorMsg.textContent = 'Something went wrong sending your message. Please try again or email Tami directly.';
     errorMsg.classList.add('visible');
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Send Message';
+    submitBtn.textContent = originalBtnText;
   }
 });
 </script>
