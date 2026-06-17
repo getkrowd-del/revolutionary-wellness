@@ -462,10 +462,8 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     contactEmail: form.email.value,
     contactName: form.name.value,
     contactPhone: form.phone.value,
-    data: {
-      program: form.program.value,
-      message: form.message.value
-    }
+    "data.program": form.program.value,
+    "data.message": form.message.value
   };
 
   try {
