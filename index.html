@@ -18,7 +18,22 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Revolutionary Wellness | Move. Breathe. Thrive." />
 <!-- End SEO Meta Tags -->
-
+<script data-lp-token-hydrate>
+(function(){try{
+  var slug="lp-mph4isny-uieqz";
+  var SK='lp_access_'+slug;
+  var map={access_token:'lp_pw_',allowlist_access_token:'lp_al_',pin_access_token:'lp_pin_',paywall_access_token:'lp_paid_'};
+  var u=new URL(location.href);var found=null;var changed=false;
+  Object.keys(map).forEach(function(p){var v=u.searchParams.get(p);if(v){found=v;try{localStorage.setItem(map[p]+slug,v);}catch(e){}u.searchParams.delete(p);changed=true;}});
+  if(found){try{sessionStorage.setItem(SK,found);}catch(e){}}
+  else{try{if(!sessionStorage.getItem(SK)){var t=localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug);if(t)sessionStorage.setItem(SK,t);}}catch(e){}}
+  if(changed){try{history.replaceState(null,'',u.toString());}catch(e){}}
+  function getTok(){try{return sessionStorage.getItem(SK)||localStorage.getItem('lp_pw_'+slug)||localStorage.getItem('lp_al_'+slug)||localStorage.getItem('lp_pin_'+slug)||localStorage.getItem('lp_paid_'+slug);}catch(e){return null;}}
+  function needsToken(url,method){if(!url)return false;var s=String(url);var m=(method||'GET').toUpperCase();var isSheetWrite=(m==='POST'||m==='PATCH'||m==='PUT'||m==='DELETE')&&/\/sheet-rows(\/|$|\?)/.test(s);var isSheetRead=/\/sheet-data(\/|$|\?)/.test(s);var isLlm=/\/api\/landing-pages\/public\/[^/]+\/(llm|llm-config)(\/|$|\?)/.test(s);return isSheetWrite||isSheetRead||isLlm;}
+  if(window.fetch){var _f=window.fetch;window.fetch=function(input,init){try{var url=typeof input==='string'?input:(input&&input.url)||'';var method=(init&&init.method)||(input&&input.method)||'GET';if(needsToken(url,method)){var tok=getTok();if(tok){init=init||{};var h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});if(!h.has('X-Landing-Page-Token'))h.set('X-Landing-Page-Token',tok);init.headers=h;}}}catch(e){}return _f.call(this,input,init);};}
+  if(window.XMLHttpRequest){var _o=XMLHttpRequest.prototype.open;var _s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__lpM=m;this.__lpU=u;return _o.apply(this,arguments);};XMLHttpRequest.prototype.send=function(){try{if(needsToken(this.__lpU,this.__lpM)){var tok=getTok();if(tok)this.setRequestHeader('X-Landing-Page-Token',tok);}}catch(e){}return _s.apply(this,arguments);};}
+}catch(e){}})();
+</script>
 
 <script data-field-replace>
 (function(){
@@ -178,9 +193,10 @@
     if(!amountCents||amountCents<100){alert('Amount must be at least $1.00');return Promise.reject('invalid_amount');}
     if(!email){alert('Please enter your email address.');return Promise.reject('no_email');}
     var successBase=window.location.href.split('?')[0];
+    var __pLoc=(document.documentElement.lang||navigator.language||'en');
     return fetch(apiBase+'/api/landing-pages/public/'+slug+'/payment/checkout',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
+      body:JSON.stringify({email:email,name:customerName,amountCents:amountCents,productName:productName,productDescription:productDescription,quantity:quantity,locale:__pLoc,successUrl:successBase+'?payment=success&product='+encodeURIComponent(productName)+'&session_id={CHECKOUT_SESSION_ID}',cancelUrl:successBase+'?payment=cancelled'})
     }).then(function(r){return r.json();}).then(function(d){
       if(d.checkoutUrl){window.location.href=d.checkoutUrl;}
       else{alert(d.error||'Failed to process payment');throw new Error(d.error);}
@@ -190,6 +206,8 @@
   document.addEventListener('DOMContentLoaded',function(){
     var urlParams=new URLSearchParams(window.location.search);
     if(urlParams.get('payment')==='success'){
+      var sidP=urlParams.get('session_id');
+      if(sidP){try{fetch(apiBase+'/api/landing-pages/public/'+slug+'/checkout/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:sidP})}).catch(function(){});}catch(e){}}
       var pName=urlParams.get('product')||'your item';
       var overlay=document.createElement('div');overlay.id='payment-success-overlay';
       overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999999;font-family:system-ui,-apple-system,sans-serif;';
@@ -218,7 +236,7 @@
     <li><a href="water-aerobics/index.html">Water Aerobics</a></li>
     <li><a href="#about">About Tami</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Book a Class</a>
+  <a href="#contact" class="nav-cta">Contact</a>
 </nav>
 
 <!-- HERO -->
@@ -354,15 +372,66 @@
 
 <!-- CONTACT -->
 <section class="contact fade-up" id="contact">
-  <p class="section-eyebrow">Get in Touch</p>
-  <h2 class="section-title">Ready to Move Together?</h2>
-  <p>Whether you're a parent looking for Story Time Yoga, a senior ready for Sassy Seat, or swimming toward something new — we'd love to see you.</p>
-  <div class="contact-cards">
-    <div class="cc"><div class="cc-icon">📅</div><div class="cc-label">Library Classes</div><div class="cc-value">Check the library calendar for Story Time Yoga dates &amp; details</div></div>
-    <div class="cc"><div class="cc-icon">📍</div><div class="cc-label">Location</div><div class="cc-value">Classes at local libraries &amp; fitness facilities</div></div>
-    <div class="cc"><div class="cc-icon">✉️</div><div class="cc-label">Inquiries</div><div class="cc-value">Contact Tami for schedules, partnerships &amp; private sessions</div></div>
+  <div class="contact-header">
+    <p class="section-eyebrow">Get in Touch</p>
+    <h2 class="section-title">Ready to Move Together?</h2>
+    <p>Whether you're a parent looking for Story Time Yoga, a senior ready for Sassy Seat, or swimming toward something new — send a message and Tami will get back to you.</p>
   </div>
-  <p class="contact-note">We can't wait to see you! 💛</p>
+
+  <div class="contact-grid">
+    <div class="contact-cards">
+      <div class="cc"><span class="cc-icon">📅</span><div><div class="cc-label">Library Classes</div><div class="cc-value">Check the library calendar for Story Time Yoga dates &amp; details</div></div></div>
+      <div class="cc"><span class="cc-icon">📍</span><div><div class="cc-label">Location</div><div class="cc-value">Classes at local libraries &amp; fitness facilities</div></div></div>
+      <div class="cc"><span class="cc-icon">✉️</span><div><div class="cc-label">Inquiries</div><div class="cc-value">Use the form to ask about schedules, partnerships &amp; private sessions</div></div></div>
+      <p class="contact-note">We can't wait to hear from you! 💛</p>
+    </div>
+
+    <div class="contact-form-card">
+      <h3 class="contact-form-title">Send a Message</h3>
+      <p class="contact-form-sub">Fill out the form below and Tami will be in touch soon.</p>
+
+      <div class="form-error-msg" id="form-error"></div>
+
+      <form id="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required placeholder="Jane Smith">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="jane@email.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone (optional)</label>
+            <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+          </div>
+          <div class="form-group">
+            <label for="program">I'm Interested In</label>
+            <select id="program" name="program">
+              <option value="General Inquiry">General Inquiry</option>
+              <option value="Story Time Yoga">Story Time Yoga</option>
+              <option value="Sassy Seat">Sassy Seat</option>
+              <option value="Water Aerobics">Water Aerobics</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" required placeholder="Tell us a bit about what you're looking for..."></textarea>
+        </div>
+        <button type="submit" class="form-submit-btn" id="submit-btn">Send Message</button>
+      </form>
+
+      <div class="form-success-msg" id="form-success">
+        <div class="icon">💛</div>
+        <h4>Message Sent!</h4>
+        <p>Thank you for reaching out. Tami will get back to you soon.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -371,7 +440,39 @@
   <p>Move · Breathe · Thrive</p>
 </footer>
 
+<script>
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), { threshold:0.1, rootMargin:'0px 0px -60px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
-  <script src="script.js"></script>
+// Contact form submit
+const form = document.getElementById('contact-form');
+const submitBtn = document.getElementById('submit-btn');
+const errorMsg = document.getElementById('form-error');
+const successMsg = document.getElementById('form-success');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  errorMsg.classList.remove('visible');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+
+  try {
+    const formData = new FormData(form);
+    const response = await fetch(window.location.pathname, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    });
+
+    form.style.display = 'none';
+    successMsg.classList.add('visible');
+  } catch (err) {
+    errorMsg.textContent = 'Something went wrong. Please try again or email Tami directly.';
+    errorMsg.classList.add('visible');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send Message';
+  }
+});
+</script>
 </body>
 </html>
